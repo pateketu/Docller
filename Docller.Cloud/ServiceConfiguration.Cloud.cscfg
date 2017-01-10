@@ -5,8 +5,8 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=docller7;AccountKey=Z5mXq668RlY06d+3bD9NQ+L0xVA8GTCUTD1eU3FCa66PyfclomImtr2OKIa88Bbl1L6BfbvCDqGZFJKkUWf1Ow==" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="pateketu" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEB62mMRK28GWS14mqy3fwHEwDQYJKoZIhvcNAQEBBQAEggEAf/lVPJd/djjzYXwxjaix/4IrvC9pNCSW7HTzvwSq62jUlUYtHt/Es1skAGeJ07uLWuBNFCD8EI7FyjQX5I1OKeErv5z2dY2Jg7WO2yqa+BnDzsa2QXwPYQDsZvWTz0H0ojOrP6j3Xvy9yesYJc2SY8K59NyaAhmRHH9OMftU7Qgy0wsAxnUSoeCc6RlRQJxSJ1/+zZEInthEBlDDNvaJ0pm1nlx5DP45g7HSxvnaVpfUBcXHFh6mdFl1qkoy900qEmP56MmTH58788P6U7Da1vdtknoAHI6dYuTtS1NWd2usTdCzd/NGZFDX+goEAt6uLNd7ch360kBNiAjN1w7prDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECH5Pqe7oijaJgBD7JRwH80C4UHioc3zjRszf" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2014-09-20T23:59:59.0000000+01:00" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
       <Setting name="FederatioName" value="Customer_Federation" />
