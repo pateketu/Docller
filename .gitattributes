@@ -1,1 +1,1 @@
-*.cs linguist-language=csharp
+*.* linguist-language=csharp
