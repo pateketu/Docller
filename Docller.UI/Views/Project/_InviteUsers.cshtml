@@ -1,0 +1,55 @@
+﻿@using Docller.Common
+@model string
+<div id="inviteUserContainer">
+<div data-bind="foreach: companies">
+    <div class="modal-inviteuser">
+        <div class="controls-row">
+            <input type="text" placeholder="Company name..." class="span4" data-bind="value: companyName, attr: {'id':'companyName_' +  $index(), 'data-typeahead-target':'users_' +  $index()}"> 
+        
+        </div>
+        <div class="controls-row modal-inviteuser-emails">
+            <textarea rows="5" id="emails"class="span4" data-bind="value: users, attr: {'id':'users_' +  $index()}" placeholder="E-mail addresses, one per line"></textarea>
+          
+        </div>
+        <!-- ko if: $index() !== 0 -->
+        <div class="controls-row span4">
+            <a href="#" class="btn btn-mini pull-right" data-bind="click: $root.removeCompany"><i class="icon-remove"></i>Delete</a>
+        </div>
+        <div class="clearfix"></div>   
+        <!-- /ko -->
+    </div> 
+</div>
+<div id="errors" class="modal-inviteuser-errors"></div>
+<div class="controls-row modal-footer modal-inviteuser-footer">
+    <a class="btn btn-small" href="#" data-bind="click: addCompany">
+        <i class="icon-plus"></i>
+        Add more...
+    </a>
+    <a href="#" class="btn btn-primary" data-bind="click: save" data-url="/Project/Subscribe/@ViewContext.GetCurrentProjectId()">Send...</a>
+</div>
+</div>
+
+<script type="text/javascript">
+    @*http://stackoverflow.com/questions/17548252/multiple-fields-with-twitters-bootstrap-typehead-inside-a-modal
+    $.fn.typeahead.Constructor.prototype.show = function() {
+        var pos = $.extend({}, this.$element.position(), {
+            height: this.$element[0].offsetHeight
+        });
+        this.$menu
+            .insertAfter(this.$element)
+            .css({
+                top: (pos.top + pos.height + this.$element.closest('.modal-body').scrollTop()),
+                left: pos.left
+            })
+            .show();
+
+        this.shown = true;
+        return this;
+
+    };
+    *@
+    docller.subscribers = @Html.Raw(this.Model);
+    ko.applyBindings(new CompaniesModel(), document.getElementById("inviteUserContainer"));
+    $("#companyName_0").typeahead(options);
+
+</script>

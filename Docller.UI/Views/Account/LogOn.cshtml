@@ -1,0 +1,54 @@
+﻿@using System.Web.Optimization
+@using Docller
+@model Docller.Models.LogOnModel
+@{
+    ViewBag.Title = "Docller Login";
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+@section alternateHeader{
+    <div class="dc-headerRight">
+        <ol>
+            <li><strong>New Customer?</strong> @Html.ActionLink("Sign-Up", "Subscribe", "Customer", routeValues: null, htmlAttributes: new { Title = "Sign-up", @class = "btn btn-danger" })</li>
+        </ol>
+    </div>
+}
+@if (!Request.IsAuthenticated)
+{
+    @Scripts.Render(ScriptBundles.ValidationBundle)
+
+    <div class="dc-accountBox">
+        @Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.")
+        @using (Html.BeginForm("LogOn", "Account", routeValues: new { ReturnUrl = ViewBag.ReturnUrl }))
+        {
+            <fieldset>
+                <legend>Log On Form</legend>
+                <ol>
+                    <li>
+                        @Html.LabelFor(m => m.UserName, "E-mail Address")
+                        @Html.TextBoxFor(m => m.UserName)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.UserName, "Please provide a valid email", new { @class = "label label-important dc-whitecolor" })
+                    </li>
+                    <li>
+                        @Html.LabelFor(m => m.Password, "Password")
+                        @Html.PasswordFor(m => m.Password)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.Password, "Please provide password", new { @class = "label label-important dc-whitecolor" })
+                    </li>
+                    <li>
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe, "Remember Me", new { @class = "checkbox" })
+                    </li>
+                    <li>
+                        <div>
+                            <input type="submit" value="Log On" title="Log On" class="btn btn-small btn-primary" />
+                        </div>
+                    </li>
+                    <li>
+                        @Html.ActionLink("Forget your Password?", "ForgotPassword")
+                    </li>
+                </ol>
+            </fieldset>
+        }
+    </div>
+}

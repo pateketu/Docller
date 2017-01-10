@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Docller.Databases.CommonProcs</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{8cc75686-20f4-42fa-b11a-299d0b0d17a4}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureDatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Docller.Databases.Common</RootNamespace>
+    <AssemblyName>Docller.Databases.Common</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <GenerateCreateScript>True</GenerateCreateScript>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="StoredProcs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Drop.sql" />
+    <Build Include="StoredProcs\usp_AddAttachment.proc.sql" />
+    <Build Include="StoredProcs\usp_AddCompany.proc.sql" />
+    <Build Include="StoredProcs\usp_AddCompanyUser.proc.sql" />
+    <Build Include="StoredProcs\usp_AddDefaultProjectStatus.proc.sql" />
+    <Build Include="StoredProcs\usp_AddFile.proc.sql" />
+    <Build Include="StoredProcs\usp_AddFolders.proc.sql" />
+    <Build Include="StoredProcs\usp_AddProject.proc.sql" />
+    <Build Include="StoredProcs\usp_AddProjectUsers.sql" />
+    <Build Include="StoredProcs\usp_AddToUserCache.proc.sql" />
+    <Build Include="StoredProcs\usp_CreateTransmittals.proc.sql" />
+    <Build Include="StoredProcs\usp_GetFilePrefs.proc.sql" />
+    <Build Include="StoredProcs\usp_GetFilePreUploadInfo.proc.sql" />
+    <Build Include="StoredProcs\usp_GetFiles.sql" />
+    <Build Include="StoredProcs\usp_GetFilesForEdit.proc.sql" />
+    <Build Include="StoredProcs\usp_GetFilesInfoForDownload.sql" />
+    <Build Include="StoredProcs\usp_GetFolderPermissions.proc.sql" />
+    <Build Include="StoredProcs\usp_GetFolders.proc.sql" />
+    <Build Include="StoredProcs\usp_GetProjectDetails.proc.sql" />
+    <Build Include="StoredProcs\usp_GetProjectPermissions.proc.sql" />
+    <Build Include="StoredProcs\usp_GetProjectStatuses.proc.sql" />
+    <Build Include="StoredProcs\usp_GetSubscribers.sql" />
+    <Build Include="StoredProcs\usp_GetTenantUserId.proc.sql" />
+    <Build Include="StoredProcs\usp_GetTransmittal.sql" />
+    <Build Include="StoredProcs\usp_GetUserCompanyId.proc.sql" />
+    <Build Include="StoredProcs\usp_RenameFolder.proc.sql" />
+    <Build Include="StoredProcs\usp_SubscribeCompanies.proc.sql" />
+    <Build Include="StoredProcs\usp_UpdateCompanyAndUserForNewCustomer.proc.sql" />
+    <Build Include="StoredProcs\usp_UpdateFiles.sql" />
+    <Build Include="StoredProcs\usp_UpdateUserCache.proc.sql" />
+    <Build Include="StoredProcs\usp_ValidatedFileNames.proc.sql" />
+    <None Include="Local_Docller.Databases.CommonProcs.publish.publish.xml" />
+    <None Include="Azure_Docller.Databases.CommonProcs.publish.publish.publish.xml" />
+    <None Include="CreateFederation.sql" />
+    <None Include="Local.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Docller.Database.Types\Docller.Database.Types.sqlproj">
+      <Name>Docller.Database.Types</Name>
+      <Project>{9246945e-ef21-4f26-b533-1b6f6b561c51}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\Docller.Database.Root\Docller.Database.Root.sqlproj">
+      <Name>Docller.Database.Root</Name>
+      <Project>{fa00db71-e84e-4721-aa34-a238d57d85bb}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+    <ProjectReference Include="..\Docller.Database.FederatedTables\Docller.Database.FederatedTables.sqlproj">
+      <Name>Docller.Database.FederatedTables</Name>
+      <Project>{df830df5-21c1-4bfe-8961-4bec63f2c3f2}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="StoredProcs\usp_GetUserSubscriptionInfo.sql" />
+    <Build Include="StoredProcs\usp_GetFileHistory.sql" />
+    <Build Include="StoredProcs\usp_GetFileVersionInfo.sql" />
+    <Build Include="StoredProcs\usp_GetFilesInfo.sql" />
+    <Build Include="StoredProcs\usp_GetAttachment.sql" />
+    <Build Include="StoredProcs\usp_DeleteAttachment.sql" />
+    <Build Include="StoredProcs\usp_Rethrow.sql" />
+    <Build Include="StoredProcs\usp_DeleteFile.sql" />
+    <Build Include="StoredProcs\usp_GetIssueSheet.sql" />
+    <Build Include="StoredProcs\usp_GetTransmittalLite.sql" />
+    <Build Include="StoredProcs\usp_SetFilePreviews.sql" />
+    <Build Include="StoredProcs\usp_AddCompanyFolderPermissions.sql" />
+    <Build Include="StoredProcs\usp_GetCompanyFolderPersmission.sql" />
+    <Build Include="StoredProcs\usp_DownloadSharedFiles.sql" />
+    <Build Include="StoredProcs\usp_GetMyTransmittlas.sql" />
+    <Build Include="StoredProcs\usp_GetPermissionsForFolder.sql" />
+    <Build Include="StoredProcs\usp_GetPermissionsForProject.sql" />
+    <Build Include="StoredProcs\usp_ShareFiles.sql" />
+    <Build Include="StoredProcs\usp_UpdateFolderPermissions.sql" />
+    <Build Include="StoredProcs\usp_UpdateProjectDetails.sql" />
+    <Build Include="StoredProcs\usp_UpdateProjectPermissions.sql" />
+    <Build Include="StoredProcs\usp_GetMarkUpMetaDataInfo.sql" />
+    <Build Include="StoredProcs\usp_AddAttachment2.proc.sql" />
+  </ItemGroup>
+</Project>

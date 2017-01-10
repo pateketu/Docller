@@ -1,0 +1,16 @@
+﻿@using Docller.Core.Common
+@using Docller.Core.Models
+@{
+    ViewBag.Title = "All Projects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Select Project</h2>
+@foreach (Project project in DocllerContext.Current.Security.AvailableProjects)
+ {
+       <div class="well well-small">
+            @Html.ActionLink(project.ProjectName, "FileRegister", "Project", routeValues: new {ProjectId = project.ProjectId}, htmlAttributes: null)    
+        </div>
+    
+ }
+  

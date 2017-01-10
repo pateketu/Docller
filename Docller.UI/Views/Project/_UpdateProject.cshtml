@@ -1,0 +1,21 @@
+﻿@using System.Web.Optimization
+@using Docller
+@model Docller.Core.Models.Project
+@Scripts.Render(ScriptBundles.ValidationBundle)
+     @using (Html.BeginForm("UpdateProject", "Project"))
+         {
+             <div class="controls-row">
+                 @Html.LabelFor(m => m.ProjectName, "Project Name")
+                 @Html.TextBoxFor(m => m.ProjectName)
+                 @Html.ValidationMessageFor(m => m.ProjectName, "Project Name is Required")
+             </div>
+           @*  <div class="controls-row">
+                 @Html.LabelFor(m => m.ProjectImage, "Project Logo")
+                 <input type="file" name="logo" /> 
+             </div>*@
+             <div class="modal-footer">
+                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                 <button type="submit"class="btn btn-primary">Save</button>
+             </div>
+
+         }

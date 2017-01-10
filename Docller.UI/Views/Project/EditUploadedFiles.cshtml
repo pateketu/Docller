@@ -1,0 +1,41 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+@using Docller.Models
+@using Docller.Core.Models
+@model FileEditData
+@{
+    ViewBag.Title = "Edit Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section AdditionalHeader{
+    @Html.Partial("_FileRegisterHeader")
+    @Styles.Render(StyleBundles.HandsonTableBundle)
+}
+
+
+<div id="container-noSplitter" class="filecontainer">
+    <div class="right dc-div80">
+        <div id="editFiles-Msg"></div>  
+        <div id="editFiles-grid" class="editFiles-grid"></div>
+        <div class="editFiles-buttonBar">            
+            <button class="btn btn-inverse" type="button" id="saveButton"><i class="icon-check icon-white"></i> Save</button>
+            <button class="btn btn-inverse" type="button" id="saveAndTransmittButton">Save & Transmit <i class="icon-arrow-right icon-white"></i></button>
+        </div>
+        <script type="text/javascript" language="javascript">
+            docller.editFilesData = @Html.Raw(Model.FileJson);
+//            docller.statusData = @Html.Raw(Model.StatusJson);
+        </script>
+    </div>
+</div>
+@using (Html.BeginForm("CreateTransmital", "Project", new { ProjectId = ViewContext.GetCurrentProjectId() }, FormMethod.Post, new { id = "editFilesForm" }))
+{
+    @Html.Hidden("updatedFiles");
+}
+
+
+
+@section AdditionalFooter{    
+    @Scripts.Render(ScriptBundles.EditFilesBundle)
+}

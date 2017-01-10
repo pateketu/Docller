@@ -1,0 +1,42 @@
+﻿@using Docller.Common
+@using Docller.Core.Common
+@using Docller.Core.Models
+@model IEnumerable<PermissionInfo>
+
+<div id="editPermissions-grid">
+    
+    <table class="table table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>E-Mail</th>
+            <th>Company</th>
+            <th>Permissions</th>
+        </tr>
+        @foreach(var u in Model)
+        {
+            <tr>
+                <td>@u.DisplayName</td>
+                <td>@u.Email</td>
+                <td>@u.CompanyName</td>
+                <td>
+                    <select data-entityid="@u.EntityId" data-originalperm="@u.Permissions">
+                        <option value="0">Remove</option>
+                        <option @Html.Raw(u.Permissions==PermissionFlag.DefaultFlag ? "selected" : "") value="@PermissionFlag.DefaultFlag">View Issued Files</option>
+                        <option  @Html.Raw(u.Permissions==PermissionFlag.Read ? "selected" : "") value="@PermissionFlag.Read">Read only</option>
+                        <option  @Html.Raw(u.Permissions==PermissionFlag.ReadWrite ? "selected" : "") value="@PermissionFlag.ReadWrite">Contribute</option>
+                        <option  @Html.Raw(u.Permissions==PermissionFlag.Admin ? "selected" : "") value="@PermissionFlag.Admin">Admin</option>
+                    </select>
+                </td>
+            </tr>
+        }
+
+    </table>
+        
+</div>
+<script type="text/javascript">
+    
+    @*  var grid = new docller.editPermissionsGrid();
+    docller.projectPermissions = @Html.Raw(Model);
+    grid.create(docller.projectPermissions); *@
+</script>
+

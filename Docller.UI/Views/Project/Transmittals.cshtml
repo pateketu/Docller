@@ -1,0 +1,63 @@
+﻿@using Docller.Common
+@using Docller.UI.Common
+@model Docller.Core.Models.PageableData<Docller.Core.Models.Transmittal>
+
+<div>
+    <div class="controls-row">
+        <select name="searchOptions" id="searchOptions">
+            <option @Html.Raw(ViewBag.TransmittalSearchOption == MyTransmittalSearch.MyDrafts ? "selected" : "") value="@MyTransmittalSearch.MyDrafts">My Draft Transmittals</option>
+            <option @Html.Raw(ViewBag.TransmittalSearchOption == MyTransmittalSearch.MyTransmittals ? "selected" : "") value="@MyTransmittalSearch.MyTransmittals">Transmittals send by me</option>
+            <option @Html.Raw(ViewBag.TransmittalSearchOption == MyTransmittalSearch.SendToMe ? "selected" : "") value="@MyTransmittalSearch.SendToMe">Transmittals send to me</option>                            
+            <option @Html.Raw(ViewBag.TransmittalSearchOption == MyTransmittalSearch.SendToMyCompany ? "selected" : "") value="@MyTransmittalSearch.SendToMyCompany">Transmittals send to my organization</option>                            
+        </select>
+    </div>
+    
+    @if (Model.Count > 0)
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Created</th>
+                <th></th>
+                
+            </tr>
+            
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.TransmittalNumber</td>
+                    <td>@t.Subject</td>
+                    <td>@t.Message</td>
+                    <td>@t.CreatedDate.ToShortDateString()</td>
+                    <td>
+                        @if (ViewBag.TransmittalSearchOption == MyTransmittalSearch.MyDrafts)
+                        {
+                            @Html.ActionLink("Edit & Send", "EditTransmital", new {ProjectId = @ViewContext.GetCurrentProjectId(), t.TransmittalId})
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Issue Sheet", "IssueSheet", new { t.TransmittalId })<br/>
+                            @Html.ActionLink("Download Files", "DownloadTransmittal", "Download", new { projectId=@ViewContext.GetCurrentProjectId(), t.TransmittalId }, null)
+                                
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+<script type="text/javascript">
+    docller.projectId = @ViewContext.GetCurrentProjectId()
+    $(function() {
+
+        $("#searchOptions").change(function() {
+            var val = $(this).val();
+            window.location.replace("/Project/Transmittals/" + docller.projectId + "/?searchOptions=" + val);
+            
+        });
+
+    });
+
+</script>

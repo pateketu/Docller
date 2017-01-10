@@ -1,0 +1,56 @@
+﻿@using System.Web.Optimization
+@using Docller
+@model Docller.Core.Models.Customer
+@{
+    ViewBag.Title = "Subscribe";
+    Layout = "~/Views/Shared/_SimpleLayout.cshtml";
+}
+
+
+@*
+<p class="message-info">
+    
+</p>
+*@
+
+<div class="dc-accountBox">
+    
+    @Scripts.Render(ScriptBundles.ValidationBundle)
+
+    @Html.ValidationSummary(true, "Account creation was unsuccessful.")
+
+    @using (Html.BeginForm("Subscribe", "Customer"))
+    {
+        <fieldset>
+            <legend>Sign-up Form</legend>
+            <ol>
+                <li>
+                    @Html.LabelFor(m => m.AdminUser.Email, "Administrator E-Mail")
+                    @Html.TextBoxFor(m => m.AdminUser.Email)
+                    <br />
+                    @Html.ValidationMessageFor(m => m.AdminUser.Email, "Valid E-Mail Address is Required", new { @class = "label label-important dc-whitecolor" })
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.CustomerName, "Company Name")
+                    @Html.TextBoxFor(m => m.CustomerName)
+                    <br />
+                    @Html.ValidationMessageFor(m => m.CustomerName, "Company Name is Required", new { @class = "label label-important dc-whitecolor" })
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.DomainUrl, "Sub Domain")
+                    https://@Html.TextBoxFor(m => m.DomainUrl) .Docller.com 
+                    <br />
+                    @Html.ValidationMessageFor(m => m.DomainUrl, null, new { @class = "label label-important dc-whitecolor" })
+                    
+                </li>
+                <li>
+                    <div>
+                        <input type="submit" value="Register" title="Register"  class="btn btn-small btn-primary"/>
+                    </div>
+                </li>
+            
+            </ol>
+            
+        </fieldset>
+    }
+</div>

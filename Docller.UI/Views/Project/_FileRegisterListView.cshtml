@@ -1,0 +1,114 @@
+﻿@using Docller.Common
+@using Docller.Core.Common
+@using Docller.Models
+@using Docller.Core.Models
+@using File = Docller.Core.Models.File
+@using SortDirection = Docller.Core.Models.SortDirection
+@model Docller.Models.FileRegisterViewModel
+<table class="table table-hover" id="filesTable">
+    <thead>
+        <tr>
+            <th class="hidden-tablet hidden-phone">
+                <input type="checkbox" name="chkAllFiles" id="chkAllFiles" /></th>
+            <th></th>
+            <th class="hidden-desktop hidden-tablet"></th>
+            <th class="hidden-phone">Document #</th>
+            <th>Title</th>
+            <th class="hidden-desktop hidden-tablet"></th>
+            <th>Revision</th>
+            <th>Status</th>
+            <th class="hidden-phone">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (File file in Model.Files)
+        {
+            <tr data-fileId="@file.FileId" data-internalName="@file.FileInternalName" data-previewTimestamp="@file.PreviewsTimeStamp" class="preview" id="@string.Format("File_{0}_Row", file.FileId)">
+                <td class="hidden-tablet hidden-phone">
+                    <input type="checkbox" name="@file.FileId"  Id="@file.FileId" data-fileId="@file.FileId" data-internalName="@file.FileInternalName" class="chkFile"/>
+                </td>
+                <td>
+                    <div class="pull-left">
+                        <a href="#" data-toggle="directdownload" data-fileId="@file.FileId" title="Download @file.FileName">
+                            @Html.FileTypeIcon(file)
+                        </a>
+                    </div>
+                    <div class="pull-left hidden-desktop hidden-tablet" style="padding-left: 10px;">
+                        <div>
+                            @if (file.PreviewsTimeStamp > 0)
+                            {
+                                <a href="#" data-fileId="@file.FileId" data-internalName="@file.FileInternalName" data-previewTimestamp="@file.PreviewsTimeStamp" data-toggle="zoomablepreview">@file.FileName</a>
+                            }
+                            else
+                            {
+                                <a href="#" data-toggle="directdownload" data-fileId="@file.FileId">@file.FileName</a>
+                            }    
+                            @Html.VersionBadge(file) @Html.AttachmentIcon(file)
+                        </div>
+                        <div><small>by @file.CreatedBy.DisplayName / @file.CreatedDate.ToShortDateString().Replace("/", ".")</small></div>   
+                    </div>
+                    <div class="clearfix"></div>
+                </td>
+                <td class="hidden-phone">
+                    <div>
+                    @if (file.PreviewsTimeStamp > 0)
+                    {
+                        <a href="#" data-fileId="@file.FileId" data-internalName="@file.FileInternalName" data-previewTimestamp="@file.PreviewsTimeStamp" data-toggle="zoomablepreview">@file.FileName</a>
+                    }
+                    else
+                    {
+                        <a href="#" data-toggle="directdownload" data-fileId="@file.FileId">@file.FileName</a>
+                    }    
+                        @Html.VersionBadge(file) @Html.AttachmentIcon(file)
+                    </div>
+                    <div><small>by @file.CreatedBy.DisplayName / @file.CreatedDate.ToShortDateString().Replace("/", ".")</small></div>
+
+                </td>
+                <td>@file.Title</td>
+                <td class="hidden-desktop hidden-tablet">
+                    @(!string.IsNullOrEmpty(file.Revision) ? Html.Raw(string.Format("<strong>Rev:</strong> {0},", file.Revision)) : Html.Raw(""))
+
+                    @(!string.IsNullOrEmpty(file.Status) ? Html.Raw(string.Format("<strong>Status:</strong> {0}", file.Status)) : Html.Raw(""))
+                </td>
+                <td  class="hidden-phone">@file.Revision</td>
+                <td  class="hidden-phone">@file.Status</td>
+                <td class="hidden-phone">
+                      @if (file.PreviewsTimeStamp > 0)
+                      {
+                          <button title="Intreractive Preview" class="hidden-phone hidden-desktop btn btn-mini" data-fileId="@file.FileId" data-internalName="@file.FileInternalName" data-previewTimestamp="@file.PreviewsTimeStamp" data-toggle="zoomablepreview" data-forcezoomable='true'><i class="icon icon-eye-open"></i></button>
+                      }
+                      else
+                      {
+                          <button title="Download" class="hidden-phone hidden-desktop btn btn-mini" data-toggle="directdownload" data-fileId="@file.FileId"><i class="icon icon-download-alt"></i></button>
+                      }
+                    <div class="dropdown hidden-phone hidden-tablet">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" title="More options">
+                            <img src="/Images/action_arrow.png" />
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-toggle="directdownload" data-fileId="@file.FileId"><i class="icon-download-alt"></i> Download</a></li>
+                            @{ bool hasReadWriteAccess = false;}
+                            @if (DocllerContext.Current.Security.HasReadWriteAccess)
+                            {
+                                hasReadWriteAccess = true;
+                                <li><a href="#" class="uploadVersion" data-fileId="@file.FileId" id="@string.Format("uploadVersion_{0}", file.FileId)"><i class="icon-upload"></i> Upload new revision</a></li>
+                                <li><a href="#" class="fileDelete" data-fileId="@file.FileId"><i class="icon-remove"></i> Delete</a></li>
+                            }
+                            <li><a data-target="#historyModal" data-toggle="modal" href="/Project/FileHistory/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/?fileId=@file.FileId"><i class="icon-list-alt"></i> History</a></li>
+                            <li class="divider"></li>
+                            <li><a  href="#" class="uploadComment" data-fileId="@file.FileId" id="@string.Format("uploadcomment_{0}", file.FileId)"><i class="icon-comment"></i> Attach Comment</a></li>
+                            <li><a  href="/Project/Comments/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/?fileId=@file.FileId&name=@file.FileName"><i class="icon-book"></i> View Comments</a></li>
+                            
+                            @if (hasReadWriteAccess)
+                            {
+                                <li class="divider"></li>
+                                <li><a data-target="#attachmentModal" data-toggle="modal" href="/Project/ManageAttachments/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/?fileId=@file.FileId">Manage CAD attachment</a></li>
+                            }
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

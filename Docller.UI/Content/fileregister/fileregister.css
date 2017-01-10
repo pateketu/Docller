@@ -1,0 +1,262 @@
+﻿.filecontainer .left { width:12%; overflow:hidden;}
+
+.k-widget { border-width:0px!important; }
+
+
+
+.left ul { list-style-type:none;}
+.topNav { margin-left:50px;}
+.bottomNav li,
+.topNav li { padding: 7px;}
+.bottomNav li a,
+.topNav li a { color:#000!important;font-size:1.1em;}
+
+
+.bottomNav a {
+     display: inline-block;overflow: auto;margin-left: 3px;padding-left: 3px;
+}
+.bottomNav ul, li { list-style: none;list-style-image: none; white-space: nowrap }
+.dc-icon-envelope 
+{ 
+    list-style-image:url("../Images/Icons/glyphicons_010_envelope.png");
+    list-style-position:outside;
+   
+}
+                
+.dc-icon-shoebox 
+{ 
+    width: 20px;
+	height: 27px;
+    display: inline-block;
+	vertical-align: top;
+	background-repeat: no-repeat;
+	background-position: left;
+	background-image: url("../Images/Icons/glyphicons_029_notes_2.png");
+	background-position: 0 0;   
+}
+
+.dc-icon-user
+{
+    list-style-image:url("../Images/Icons/glyphicons_003_user.png");
+    list-style-position:outside;
+} 
+
+.treeViewfolder { background-image:url("../Images/Icons/folder.png")}
+.folderView { margin-bottom:10px!important;}
+.sharedFolderView li,
+.folderView li { margin-left:10px!important; padding-top:5px!important;}
+.k-in {cursor:pointer!important; font-size:1.1em;}
+.sharedFolderView { margin-top:10px!important; margin-bottom:10px!important;}
+
+
+.dc-folder span.dynatree-icon
+{
+    width: 16px;
+	height: 16px;
+	display: inline-block;
+	vertical-align: top;
+	background-repeat: no-repeat;
+	background-position: left;
+	background-image: url("../Images/glyphicons-halflings.png");
+	background-position: 0 0;   
+} 
+
+ul.dynatree-container 
+{
+     border-style:none;
+    overflow: hidden; 
+}
+
+.dynatree-ico-cf span.dynatree-icon
+{
+	background-position: -384px -120px;
+}
+
+.dynatree-ico-ef span.dynatree-icon
+{
+    background-position: -408px -120px;
+}
+.folderNav a
+{
+    color:#000;
+}
+
+.filecontainer .right
+{
+    padding-top:15px;
+    padding-left:15px;    
+}
+
+.droparea 
+{
+    background-color:rgb(247, 247, 249);
+    border: 2px solid #EBEBEB;
+    text-align:center;
+    height:25px;    
+}
+
+.fileuploader_footer 
+{
+  height:auto;    
+}
+.fileuploader_options
+{
+     padding-top:7px;      
+}
+.fileuploader_options input
+{   
+    width:auto;    
+    margin-top:auto;    
+}
+.file_msg
+{
+    padding-left:16px;    
+}
+a.fileupload_failed{
+    background: url('plupload/img/error.gif');
+	cursor: default;
+}
+a.fileupload_done {
+	background: url('plupload/img/done.gif');
+	cursor: default;
+}
+.foldercrumb {margin-top:10px;}
+.fileListHeader{border-bottom: solid 1px #ddd;margin-bottom: 10px;}
+.fileListHeader > .nav { margin-bottom:0px;}
+.fileListHeader > .nav > .dropdown { display: inline;}
+.fileListHeader > .folderTab {
+     border-top: 1px solid #ddd;border-left: 1px solid #ddd;  border-right: 1px solid #ddd;
+    padding: 3px 8px 3px 8px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom: 1px transparent solid;
+}
+.fileAttachmentsTable img { max-width: none;}
+.previewArea { /*overflow-x: hidden;*/padding-top: 10px; }
+/*.sticker {
+    padding:20px;
+    margin:20px 0;    
+    
+}*/
+
+.stick {
+    position:fixed;
+    top:0px;
+}
+
+.zoomContainer {
+    height: 360px;
+    
+    margin: 0 auto;
+    position: relative
+}
+
+.widemodal .zoomContainer {
+    width: 800px;
+    border: 1px solid black;
+}
+
+/*
+#zoomContainer .modal-body {
+    height:620px; 
+    overflow:visible;
+    left: 80px;
+}
+
+#zoomModal .modal-footer {
+    margin-top: 100px;
+}
+    */
+.thPreview {border:solid 1px lightgray;margin-bottom:20px;}
+.thPreviewAction {margin-top: -5px;}
+.thPreviewImage {width: 100%;text-align: center;}
+.thViewFileName{overflow:hidden; display:inline-block; width:90%;}
+
+.leftNav {
+    overflow: hidden;
+}
+
+.resizable-left {
+     width: 14.52991452991453%;
+    *width: 14.476723040552828%;
+}
+
+.resizable-left.out{ width: auto;}
+
+.resizable-right {
+     width: 82.90598290598291%;
+    *width: 82.8527914166212%;
+}
+.resizable-right .row-fluid,
+.resizable-right:first-child {
+    padding-left: 10px;
+}
+.ui-resizable-e {
+            cursor: ew-resize;
+            width: 10px!important;
+            /*height: 16px;
+            background-image: url(themes/base/images/ui-icons_222222_256x240.png);
+            background-position: 0 -224px; 
+                */
+            top: 0;
+            bottom: 0;
+            
+            background-color: rgb(243, 243, 244);
+            border-left: 1px solid #dbdbde;
+            border-right: 1px solid #dbdbde;
+        }
+.ui-resizable-e div {
+    position: relative;
+    /*margin-left: -5px;*/
+}
+
+.ui-resizable-handle{ z-index: 99!important;}
+.row-folderViewAction {
+    margin-bottom:5px;
+}
+
+.no-table-hover{ background: #fff!important;}
+.zoomablepreview td { text-align:center}
+
+.overlaid {
+    position: relative;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    color: white;
+    opacity: 0.7;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
+
+}
+.padded { padding: 5px;}
+.transmittalFiles {
+        margin-top: 30px;
+    }
+/*
+    @media (min-width: 750px) {
+    
+}
+.filelistwrapper{ border-right: 1px solid #ddd;}*/
+
+/* Table sorting
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+ 
+table.table thead .sorting { background: url('../Images/sort_both.png') no-repeat center right; }
+table.table thead .sorting_asc { background: url('../Images/sort_asc.png') no-repeat center right; }
+table.table thead .sorting_desc { background: url('../Images/sort_desc.png') no-repeat center right; }
+ 
+table.table thead .sorting_asc_disabled { background: url('../Images/sort_asc_disabled.png') no-repeat center right; }
+table.table thead .sorting_desc_disabled { background: url('../Images/sort_desc_disabled.png') no-repeat center right; }
+     */

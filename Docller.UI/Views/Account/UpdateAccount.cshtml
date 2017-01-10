@@ -1,0 +1,63 @@
+﻿@using System.Web.Optimization
+@using Docller
+@model Docller.Models.UserViewModel
+@{
+    ViewBag.Title = "Update Account";
+    
+}
+
+@if (ViewBag.IsDlg == null)
+{ 
+    <p class="message-info">
+      @ViewBag.Message
+    </p>
+
+}
+
+
+ @Scripts.Render(ScriptBundles.ValidationBundle)
+
+ <div class="dc-accountBox">
+       
+    @Html.ValidationSummary(true, "Please correct the errors and try again.")
+
+        @using (Html.BeginForm((string)ViewBag.FormAction, "Account", routeValues: new { ReturnUrl = ViewBag.ReturnUrl }))
+        {
+            <fieldset>
+                <legend>Account Update Form</legend>
+                <ol>
+                    <li>
+                        @Html.LabelFor(m => m.FirstName, "First Name")
+                        @Html.TextBoxFor(m => m.FirstName)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.FirstName, "First Name is required", new { @class = "label label-important dc-whitecolor" })
+                    </li>
+                    <li>
+                        @Html.LabelFor(m => m.LastName, "Last Name")
+                        @Html.TextBoxFor(m => m.LastName)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.LastName, "Last Name is required", new { @class = "label label-important dc-whitecolor" })
+                    </li>
+                    <li>
+                        @Html.LabelFor(m => m.Password, "Password")
+                        @Html.PasswordFor(m => m.Password)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.Password, null, new { @class = "label label-important dc-whitecolor" })
+                    </li>
+                    <li>
+                        @Html.LabelFor(m => m.ConfirmPassword, "Confirm Password")
+                        @Html.PasswordFor(m => m.ConfirmPassword)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "label label-important dc-whitecolor" })
+                    </li>
+                    <li>
+                        <input type="submit" value="Update" title="Update"   class="btn btn-small btn-primary"/>
+                    </li>
+                </ol>
+                
+            </fieldset>
+            
+        }
+
+    </div>
+

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="Docller.Cloud" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-10.1.8">
+  <WebRole name="Docller.UI" vmsize="Small">
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+    </Endpoints>
+    <Imports>
+      <Import moduleName="Diagnostics" />
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
+    <LocalResources>
+      <LocalStorage name="BlobStorage" cleanOnRoleRecycle="true" sizeInMB="5000" />
+    </LocalResources>
+    <ConfigurationSettings>
+      <Setting name="FederatioName" />
+      <Setting name="DistributionName" />
+      <Setting name="FederationEnabled" />
+      <Setting name="NoReplyEmailSettingress" />
+      <Setting name="DefaultFolders" />
+      <Setting name="DefaultStatus" />
+      <Setting name="AzureFolderPathSeperator" />
+      <Setting name="AzureBlobStorage" />
+      <Setting name="UseHttpCache" />
+      <Setting name="LocalStoragePath" />
+      <Setting name="SupportedCADFileTypes" />
+      <Setting name="DomainFormat" />
+      <Setting name="AzureStorageConnectionString" />
+      <Setting name="DocllerDbConnection" />
+    </ConfigurationSettings>
+  </WebRole>
+</ServiceDefinition>

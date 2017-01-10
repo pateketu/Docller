@@ -1,0 +1,23 @@
+﻿@using System.Web.Optimization
+@using Docller
+@model Docller.Core.Models.Customer
+
+
+    
+    @Scripts.Render(ScriptBundles.ValidationBundle)
+
+
+    @using (Html.BeginForm("UpdateCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="controls-row">
+            @Html.LabelFor(m => m.ImageUrl, "Logo:")
+            <input type="file" name="logo" id="logo" />
+        </div>
+
+
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button type="submit"class="btn btn-primary">Save</button>
+
+        </div>
+    }

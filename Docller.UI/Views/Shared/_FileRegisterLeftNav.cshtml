@@ -1,0 +1,32 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+@using Microsoft.Practices.EnterpriseLibrary.Common.Configuration
+   
+<div class="leftNav">
+    <div id="tree">
+        @*Tree Container*@
+    </div>
+   
+    @Html.Partial("_Folders",ViewContext.GetFolderJson())
+    
+    @Scripts.Render(ScriptBundles.FolderTreeBundle)
+    
+    <div class="border  hidden-tablet hidden-phone"></div>
+    @*<ul id="sharedFolderView" class="sharedFolderView">
+        <li><span class="k-sprite treeViewfolder"></span>Shared Folder          
+            
+            </ul>
+        </li>
+    </ul>*@
+    @if (!ViewBag.ShowAsPicker)
+    {
+        <div class="border hidden-tablet hidden-phone"></div>
+        <ul class="bottomNav hidden-tablet hidden-phone">
+            <li>
+                <span class="dc-icon-shoebox"></span>@Html.ActionLink("Review Transmittals","Transmittals","Project",new {ProjectId=ViewContext.GetCurrentProjectId()},null)
+
+            </li>            
+        </ul>
+    }
+</div>

@@ -1,0 +1,457 @@
+﻿
+@using Docller.Common
+@using Docller.Core.Common
+@using Docller.Models
+@using Docller.Core.Models
+@using File = Docller.Core.Models.File
+@using SortDirection = Docller.Core.Models.SortDirection
+@model Docller.Models.FileRegisterViewModel
+@{
+    ViewBag.Title = "File Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section AdditionalHeader{
+    @Html.Partial("_FileRegisterHeader")
+}
+<div id="container" class="row-fluid">
+    <div class="row-folderViewAction hidden-desktop">
+         <button class="btn btn-info btn-mini" id="btn-folderView"><i class="icon-list-alt"></i></button>    
+    </div>
+    
+    <div class="resizable-left pull-left collapse in hidden-phone hidden-tablet" id="folderArea">
+        @Html.Partial("_FileRegisterLeftNav")
+        <div class="ui-resizable-handle ui-resizable-e hidden-tablet hidden-phone" id="resizeHandle"></div>
+    </div>
+    
+    <div class="resizable-right pull-left" id="fileContainer">
+        
+        
+        <ul class="nav nav-pills folderNav hidden-tablet hidden-phone" id="nav-files">
+            @{ bool showBorder = false;}
+            
+            @if (ViewContext.GetCurrentFolderId() > 0)
+            {
+                if (DocllerContext.Current.Security.HasReadWriteAccess)
+                {
+                    showBorder = true;
+                    <li><a href="#" id="nav-upload"><i class="icon-upload"></i> Upload</a></li>
+                    <li class="hidden dropdown" id="nav-fileEditOptions">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            File Options <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li id="nav-edit" class="hidden"><a href="#"><i class="icon-edit"></i> Edit details</a></li>
+                            <li id="nav-delete" class="hidden"><a href="#"><i class="icon-remove"></i> Delete</a></li>
+                        </ul>
+                    </li>
+                }
+                <li class="hidden" id="nav-download"><a href="#"><i class="icon-download-alt"></i> Download</a></li>
+                if (DocllerContext.Current.Security.CanCreateTransmittal)
+                {
+                    showBorder = true;
+                    <li class="hidden" id="nav-sharefiles"><a  data-target="#shareFilesModal" data-toggle="modal"  href="/Project/ShareFiles/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/"><i class="icon-file"></i> Share...</a></li>
+                }
+
+            }
+           
+            @if (DocllerContext.Current.Security.CanCreateTransmittal)
+            {
+                showBorder = true;
+                
+                <li><a href="@Url.Action("CreateTransmital", new { ProjectId = ViewContext.GetCurrentProjectId(), FolderId=ViewContext.GetCurrentFolderId() })" id="createTransmittalAction"><i class="icon-envelope"></i> Create Transmittal</a></li>
+            }
+            @if (ViewContext.GetCurrentFolderId() > 0)
+            {
+                if (DocllerContext.Current.Security.CanAdminProject)
+                {
+                    <li id="nav-sharefolder"><a data-target="#shareFolderModal" data-toggle="modal" href="/Project/ShareFolder/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/"><i class="icon-share"></i> Share Folder</a></li>
+                }
+            }
+            @if (DocllerContext.Current.Security.CanCreateFolder)
+            {
+                showBorder = true;
+                <li><a href="#newFolder" id="newFolderAction" data-toggle="modal"><i class="icon-folder-close"></i> New Folder</a></li>
+            }
+            
+            @if (ViewContext.GetCurrentFolderId() > 0)
+            {
+                if (DocllerContext.Current.Security.CanAdminFolder)
+                {
+                    showBorder = true;
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i></i> Folder Options <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-target="#renameFolder" data-toggle="modal"><i class="icon-random"></i> Rename</a></li>
+                            @*<li><a href="#"><i class="icon-remove"></i> Delete</a></li>*@
+                            <li class="divider"></li>
+                            <li><a data-toggle="modal" href="/Project/ManageFolderPermissions/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()" data-target="#folderPermModal">
+                                    <i class="icon-lock"></i> Manage Permissions
+                                </a></li>
+                        </ul>
+                    </li>
+
+                }
+            }
+                     
+        </ul>
+        
+        @if (showBorder)
+        {
+            <div class="clearfix"></div>
+            <div class="border border-fullwidth"></div>
+        }
+        <div class="row-fluid">
+            @if (this.Model.FolderCrumbs.Count > 0)
+            {
+                <div class="span7" id="@Html.Raw((ViewBag.ThumbnailView == null || !ViewBag.ThumbnailView) ? "fileRegisterListView" : "fileRegisterThumbnailView")">
+                    <div class="foldercrumb">
+                        <div class="clearfix fileListHeader">
+                            <div class="pull-left folderTab">
+                                <i class="icon-folder-open"></i> @this.Model.FolderCrumbs.First().FolderName
+                            </div>
+                            <div class="nav pull-right">
+                                @if (ViewBag.ThumbnailView == null || !ViewBag.ThumbnailView)
+                                {
+                                    <a href="@Url.Action("FileRegister", new {ProjectId = ViewContext.GetCurrentProjectId(), FolderId = ViewContext.GetCurrentFolderId(), ThView = true})" title="Thumbnail View" data-toggle="tooltip"><i class="icon-th"></i></a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("FileRegister", new {ProjectId = ViewContext.GetCurrentProjectId(), FolderId = ViewContext.GetCurrentFolderId()})" title="List View"  data-toggle="tooltip"><i class="icon-th-list"></i></a>
+                                }
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                        Sort
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @{ RouteValueDictionary routeValueDictionary = ViewContext.GetCombinedRouteValues(); }
+                                        @{ string action = ViewContext.RouteData.GetRequiredString("action"); }
+                                        <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.Date, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.Date ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i> Date</a></li>
+                                        <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.FileName, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.FileName ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i> Document #</a></li>
+                                        <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.Title, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.Title ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i> Title</a></li>
+                                        <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.Status, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.Status ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i>Status</a></li> 
+                                    </ul>                          
+                                </div>
+                            </div>
+                        </div>
+                    </div>          
+                    @if (this.Model.Files.Count > 0)
+                    {
+                        if (ViewBag.ThumbnailView == null || !ViewBag.ThumbnailView)
+                        {
+                            @Html.Partial("_FileRegisterListView", this.Model)
+                        }
+                        else
+                        {
+                            @Html.Partial("_FileRegisterThumbnailView", this.Model)
+                            ;
+                        }
+
+                        if (this.Model.Files.HasPages)
+                        {
+                            <div class="align-center">
+                                @Html.Partial("_Pagination", this.Model.Files)
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Folder contains no Files.
+                        </div>
+                    }
+                </div>
+                <div class="span3">
+                    @* TODO: Preview Area sticks oddly when resizing that needs to be sorted *@
+                    <div id="previewArea" class="previewArea affix hidden-phone hidden-tablet">
+                        
+                        
+                    </div>
+                </div>
+            }
+            else
+            {
+                <span class="span6">
+                     <span class="alert alert-info hidden-desktop">Click on the Icon above to browse folders</span>
+                </span>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="fileVersionList"></div>
+
+    <script id="fileItemTmpl" type="text/html">
+        <li data-bind="attr: { 'id': uniqueIdentifier }" class="plupload_delete">
+            <div class="plupload_file_name">
+                <span data-bind="text: fileName" />             
+            </div>
+            <div class="plupload_file_action">
+                <a href="#" data-bind="click: $root.removeFile" style="display: block;" title="Remove file from the upload queue"></a>
+            </div>
+            <div class="plupload_file_status" data-bind="fileStatusId: uniqueIdentifier">
+                0%
+            </div>
+            <div class="plupload_file_size"  data-bind="text: fileSize" />
+            <div class="plupload_clearer">&nbsp;</div>
+            <div class="file_msg" data-bind="messageId: uniqueIdentifier" />
+            <div data-bind="foreach: attachments">
+                <div class="plupload_file_name">
+                    <i class="icon-file" title="Attachment" /> <span data-bind="text: fileName" />
+                </div>
+                <div class="plupload_file_action" data-bind="attr: { 'id': parentFile }" />
+                <div class="plupload_file_status"  data-bind="fileStatusId: uniqueIdentifier">
+                    0%
+                </div>
+                <div class="plupload_file_size"  data-bind="text: fileSize" />
+                <div class="plupload_clearer">&nbsp;</div>
+                <div class="file_msg" data-bind="messageId: uniqueIdentifier" />
+            </div>
+        </li>
+    </script>
+
+    <div style="display: none; overflow: hidden" id="upload-form">   
+        <div id="alertArea">
+            
+        </div>
+        <div id="fileuploader">
+            <div class="plupload_wrapper plupload_scroll">
+                <div id="fileuploader_container" class="plupload_container">
+                    <div class="plupload">                
+                        <div class="plupload_content">
+                            <div class="plupload_filelist_header">
+                                <div class="plupload_file_name">
+                                    Filename</div>
+                                <div class="plupload_file_action">
+                                    &nbsp;</div>
+                                <div class="plupload_file_status">
+                                    <span>Status</span></div>
+                                <div class="plupload_file_size">
+                                    Size</div>
+                                <div class="plupload_clearer">
+                                    &nbsp;</div>
+                            </div>
+                            <ul id="fileuploader_filelist" class="plupload_filelist" data-bind="template: { name: 'fileItemTmpl', foreach: files }">
+                        
+                            </ul>
+                            <div class="plupload_filelist_footer fileuploader_footer">
+                                <div class="plupload_file_name" >
+                                    <div class="plupload_buttons">
+                                        <a id="fileuploader_browse" class="plupload_button plupload_add" href="#">Add files</a>
+                                        <a class="plupload_button plupload_start plupload_disabled" id="fileuploader_start" href="#">Start upload</a>
+                                    </div>
+                                    <span style="display: none;" class="plupload_upload_status" id="filelist_totalnum"></span>
+                                </div>
+                                <div style="display: none" id="filelist_footer_status">
+                                    <div class="plupload_file_action">
+                                    </div>
+                                    <div class="plupload_file_status">
+                                        <span class="plupload_total_status" id="filelist_totalpercent">0%</span></div>
+                                    <div class="plupload_file_size">
+                                        <span class="plupload_total_file_size" id="filelist_totalsize">0</span></div>
+                                    <div style="display: block;" class="plupload_progress">
+                                        <div class="plupload_progress_container">
+                                            <div class="plupload_progress_bar" id="filelist_progressbar">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="plupload_clearer">
+                                    &nbsp;</div>
+
+                                <div class="fileuploader_options" id="fileuploader_options" style="display: none">
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="attachCADfiles" checked="checked" />
+                                        <span class="label label-info">
+                                            Attach CAD File to its relevant PDF file  
+                                        </span>   
+                                    </label>                                
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="uploadnewversion" checked="checked" />
+                                        <span class="label label-info">
+                                            Upload as new Version of existing File
+                                        </span>   
+                                    </label>
+                                 
+                                </div>
+                        
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm("EditFiles", "Project", new { ProjectId = ViewContext.GetCurrentProjectId(), FolderId = ViewContext.GetCurrentFolderId() }, FormMethod.Post, new { id = "editFilesForm" }))
+    {
+     @Html.Hidden("uploadedFiles");
+     @Html.Hidden("uploadedAttachments");
+
+    }
+
+<div id="historyModal" class="widemodal hide" role="dialog">
+    @*<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>History</h3>
+        </div>*@
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+
+<div id="attachmentModal" class="modal hide" role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Manage Attachment</h3>
+    </div>
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+
+@if (DocllerContext.Current.Security.CanAdminFolder)
+{
+    <div class="modal hide"  id="renameFolder">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Rename Folder</h3>
+        </div>
+    <div class="modal-body">
+        <input type="text" placeholder="New Name..." id="txtfolderRename" name="folderRename">
+        <br/>
+        <span class="field-validation-valid label label-important" data-valmsg-replace="false" data-valmsg-for="txtfolderRename" id="folderRenameReqMsg">Folder name is required.</span>
+        <span class="label label-warning" id="renameFolderError" style="display: none;"></span>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button type="submit" class="btn btn-primary" id="btnRenameFolder">Save changes</button>
+    </div>
+</div>
+}
+
+@if (DocllerContext.Current.Security.CanCreateFolder)
+{
+    <div id="newFolder" role="dialog" class="modal hide">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Create New Folder</h3>
+        </div>
+    
+        @using (Ajax.BeginForm("CreateFolder",
+            new
+            {
+                ProjectId = ViewContext.GetCurrentProjectId(),
+                ParentFolderId = ViewContext.GetCurrentFolderId()
+            },
+            new AjaxOptions()
+            {
+                OnBegin = "window.$newFolderAction.onStart",
+                OnSuccess = "window.$newFolderAction.onComplete",
+                OnFailure = "window.$newFolderAction.onError",
+                HttpMethod = "POST"
+            },
+            new { id = "createFolderForm" }))
+        {
+            <div class="modal-body">
+                <p>Please enter a folder name, you can also enter comma (,) separated folder names to create multiple  folders. </p>
+            
+                <textarea id="folderName" name="folderName" rows="5" data-val-required="Folder name is required" data-val="true"></textarea>
+                <br/>
+                <span class="field-validation-valid label label-important" data-valmsg-replace="false" data-valmsg-for="folderName" id="folderReqMsg">Folder name is required.</span>
+                <span class="label label-warning" id="dupfolderWarning" style="display: none;"></span>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button type="submit" class="btn btn-primary" id="btnSaveNewFolder">Save changes</button>
+            </div>
+        }
+    </div>
+}
+<div class="modal hide"  id="modalDialog">
+    <!-- <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+         </div>-->
+    <div class="modal-body" id="modalMsg">
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<div class="hide" id="zoomModal" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Preview</h3>
+    </div>
+    <div class="modal-body zoomContainer" id="zoomContainer">
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info" id="downloadPreviewed" data-toggle="directdownload"> <i class="icon icon-download-alt"></i> Donwload</button> <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+
+@if (DocllerContext.Current.Security.CanAdminProject)
+{
+    <div id="shareFolderModal" class="midsizemodal hide fullHeightModal" role="dialog">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Share Folder</h3>
+        </div>
+        <div class="modal-body"></div>
+    </div>
+}
+
+@if (DocllerContext.Current.Security.CanCreateTransmittal)
+{
+       <div id="shareFilesModal" class="modal hide fullHeightModal" role="dialog">
+           <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+               <h3>Share Files</h3>
+           </div>
+           <div class="modal-body"></div>
+    </div>
+}
+@if (DocllerContext.Current.Security.CanAdminFolder)
+{
+           <div id="folderPermModal" class="midsizemodal hide fullHeightModal" role="dialog">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                           <h3>Update or Remove Folder Permissions</h3>
+                       </div>
+                       <div class="modal-body"></div>
+                       <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                           <button type="submit" class="btn btn-primary savePermissions" id="btnSaveProjectPerm" data-saveurl="/Project/SaveFolderPermissions/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()" 
+                               data-containerid="#folderPermModal">Save changes</button>
+                        </div>
+                   </div>
+            
+}
+
+<div id="attachCommentModal" class="modal hide " role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Attach a Marked up Drawing</h3>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-error"></div>
+        <div class="well well-small"></div>
+        <textarea rows="5" id="emails"class="span4" placeholder="Additional comments"></textarea>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary">Upload</button>
+    </div>
+</div>
+           

@@ -1,0 +1,21 @@
+﻿@model Docller.Models.CustomerAdminUserViewModel
+@{
+    Layout = "~/Views/Mail/_EmailLayout.cshtml"; Layout = "~/Views/Mail/_EmailLayout.cshtml"; Layout = "~/Views/Mail/_EmailLayout.cshtml";
+}
+
+
+<table style="width:100%; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif" border="0">
+    <tr>
+        <td>
+            Thank you for Subscription with Docller, Your Company Url is 
+            <a href="@Model.DomainUrl" style="color: #0088cc;text-decoration: none;">
+                @Model.DomainUrl                                                             
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-top: 10px;">
+          You can use your exisiting E-mail @Html.ValueFor(m => m.Email) to Login to above mentioned url
+        </td>
+    </tr>
+</table>

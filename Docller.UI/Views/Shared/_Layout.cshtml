@@ -1,0 +1,225 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+@using Docller.Core.Common
+@using Docller.Core.Models
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title</title>
+        @Scripts.Render(ScriptBundles.JQueryBundle)
+        @Scripts.Render(ScriptBundles.DocllerCommonBundle)
+
+        @Styles.Render(StyleBundles.ThemesBundle)
+        @Styles.Render(StyleBundles.BootstrapBundle)
+
+        @if (DocllerContext.Current.Security.CanAdminProject)
+        {
+            @Styles.Render(StyleBundles.HandsonTableBundle)
+        }
+        @RenderSection("AdditionalHeader", false)
+        @Styles.Render(StyleBundles.SiteBundle)
+        <meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        @if (Request.IsAuthenticated)
+        {
+            
+                @*<div class="container-fluid">*@
+                    <div class="navbar navbar-inverse navbar-fixed-top navbar-override">
+                        <div class="navbar-inner">
+                                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </a>
+                                <a class="brand" href="#">@ViewBag.HeaderBrand</a>
+                                <div class="btn-group pull-right">
+                                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <i class="icon-user"></i>  
+                                        @ViewContext.GetCurrentCookieData().DisplayName (@ViewContext.GetCurrentCookieData().CompanyName)
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="hidden-phone">@Html.ActionLink("Update Details", "UpdateAccount", "Account", routeValues: null, htmlAttributes: new { Id = "updateAccountLink", data_dialog_title = "Update Details", data_dialog_width = 500 })</li>
+                                        <li class="divider"></li>
+                                        <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+                                    </ul>
+                                </div>
+                                <div class="nav-collapse collapse">
+                                    <ul class="nav">
+                                        @* @Html.TopNavBarLink("Recent Updates", true, "Index", "Project", routeValues: new { ProjectId = ViewContext.GetCurrentProjectId() }, htmlAttributes: null)*@
+                                        @Html.TopNavBarProjectLink("File Register", false, "FileRegister", "Project", routeValues: new { ProjectId = ViewContext.GetCurrentProjectId() }, htmlAttributes: null)
+                                        @if (ViewContext.GetCurrentProjectId() > 0 && 
+                                             (DocllerContext.Current.Security.CanAdminProject || DocllerContext.Current.Security.CanCreateProject)
+                                            )
+                                        {
+                                            <li class="dropdown hidden-phone hidden-tablet">
+                                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                                    Admin
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    @if (DocllerContext.Current.Security.CanAdminProject)
+                                                    {
+                                                        <li><a data-toggle="modal" href="/Project/ProjectInvitation/@ViewContext.GetCurrentProjectId()" data-target="#projectInviteModal">
+                                                                <i class="icon-user"></i> Invite ...
+                                                            </a></li>
+                                                        <li><a data-toggle="modal" href="/Project/ManageProjectPermissions/@ViewContext.GetCurrentProjectId()" data-target="#projPermModal"><i class="icon-lock"></i>Manage Project Permissions</a></li>
+                                                        <li class="divider"></li>
+                                                    }
+                                                    @if (DocllerContext.Current.Security.CanCreateProject)
+                                                    {
+                                                        <li>@Html.ActionLink("New Project","Create","Project")</li>
+                                                    }    
+                                                    @if (DocllerContext.Current.Security.CanAdminProject)
+                                                    {
+                                                        <li><a data-toggle="modal" href="/Project/UpdateProject/@ViewContext.GetCurrentProjectId()" data-target="#projDetailsModal">Update Project details</a></li>
+                                                    }
+                                                    @if (DocllerContext.Current.Security.IsCustomerAdmin)
+                                                    {
+                                                        <li class="divider"></li>
+                                                        <li><a data-toggle="modal" href="/Customer/UpdateCustomer" data-target="#custModal">Update Organization details</a></li>
+                                                    }
+                                                </ul>                              
+                                            </li>
+                                            
+                                        }
+                                        @if (DocllerContext.Current.Security.AvailableProjects.Count() > 1)
+                                        {
+                                            <li class="dropdown">
+                                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                                    More Projects
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    @foreach (Project project in DocllerContext.Current.Security.AvailableProjects)
+                                                    {
+                                                        <li>@Html.ActionLink(project.ProjectName,"FileRegister","Project", routeValues: new { ProjectId = project.ProjectId },htmlAttributes: null)</li>
+                                                    }
+  
+                                                </ul>                            
+                                            </li>
+                                        }
+                                    </ul>
+                                </div><!--/.nav-collapse -->
+                            </div><!-- /. navbar-inner-->
+                     </div> <!-- /. navbar-->
+                  @*</div> <!-- /.Container -->*@
+            
+        <div class="container-fluid main-container">
+            <div class="pageHeader hidden-phone hidden-tablet">
+                <ul>
+                    <li class="left">
+                        @if (!string.IsNullOrEmpty(@ViewContext.GetCustomerImageUrl()))
+                        {
+                            <img src="@ViewContext.GetCustomerImageUrl()" class="img-polaroid"/>    
+                        }
+                        else
+                        {
+                            if (DocllerContext.Current.Security.IsCustomerAdmin)
+                             {
+                                 <a data-toggle="modal" href="/Customer/UpdateCustomer" data-target="#custModal">
+                                     <img data-src="holder.js/100x100/text:Upload Logo" class="img-polaroid" />    
+                                 </a>
+                             }
+                             else
+                             {
+                                 <img data-src="holder.js/100x100/text:Upload Logo" class="img-polaroid" />    
+                             }
+                        }
+                        
+                    </li>
+                    <li class="right">
+                        <h1>@ViewContext.GetCurrentProjectName()</h1>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            
+            @RenderBody()     
+        </div>
+            <footer>
+                <hr />
+                <div class="content-wrapper dc-footer">
+                    <div class="float-left">
+                        <p>&copy; @DateTime.Now.Year - Docller</p>
+                    </div>
+                    <div class="float-right">
+                        <ul id="social">
+                            <li><a href="http://facebook.com" class="facebook">Facebook</a></li>
+                            <li><a href="http://twitter.com" class="twitter">Twitter</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+        
+            @Scripts.Render(ScriptBundles.BootStrapBundle)
+            if (DocllerContext.Current.Security.CanAdminProject)
+            {
+                @Scripts.Render(ScriptBundles.ManagePermissionsBundle)
+            }
+            @RenderSection("AdditionalFooter", false)      
+            
+            
+            <div id="userModal" class="modal hide fullHeightModal" role="dialog">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Invite Users</h3>
+                </div>
+                <div class="modal-body"></div>
+                
+            </div>
+              if (DocllerContext.Current.Security.CanAdminProject)
+               {
+                   <div id="projectInviteModal" class="midsizemodal hide fullHeightModal" role="dialog">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                           <h3>Invite Users to collaborate on this project</h3>
+                       </div>
+                       <div class="modal-body"></div>
+                   </div>
+                   <div id="projDetailsModal" class="modal hide" role="dialog">
+                      
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                           <h3>Update Project details</h3>
+                       </div>
+                       <div class="modal-body"></div>
+                   </div>
+                   <div id="projPermModal" class="midsizemodal hide fullHeightModal" role="dialog">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                           <h3>Update or Remove Project Permissions</h3>
+                       </div>
+                       <div class="modal-body"></div>
+                       <div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                            <button type="submit" class="btn btn-primary savePermissions" id="btnSaveProjectPerm" data-saveurl="/Project/SaveProjectPermissions/@ViewContext.GetCurrentProjectId()" data-containerid="#projPermModal">Save changes</button>
+                        </div>
+                   </div>
+            
+               }
+
+            if (DocllerContext.Current.Security.IsCustomerAdmin)
+            {
+                 <div id="custModal" class="modal hide" role="dialog">
+                      
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                           <h3>Update details</h3>
+                       </div>
+                       <div class="modal-body"></div>
+                   </div>
+            }
+
+        }
+        <div style="position: absolute;top:-9999px;left: -9999px;">
+             <span class="visible-phone" id="phoneSize"></span>
+             <span class="visible-tablet" id="tabletSize"></span>
+             <span class="visible-desktop" id="desktopSize"></span>
+        </div>
+    </body>
+</html>

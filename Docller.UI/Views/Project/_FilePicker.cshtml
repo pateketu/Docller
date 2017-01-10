@@ -1,0 +1,25 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+@using Docller.Models
+@using Docller.Core.Models
+@using File = Docller.Core.Models.File
+@using SortDirection = Docller.Core.Models.SortDirection
+@model Docller.Models.FileRegisterViewModel
+<div id="container" class="row-fluid" >
+    <div class="span2">
+        <div>
+            <div id="tree">
+                @*Tree Container*@
+            </div>
+           @Html.Partial("_Folders",ViewContext.GetFolderJson())
+            @Scripts.Render(ScriptBundles.FilePickerFolderTreeBundle)
+        </div>
+    </div>
+    <div class="span10">
+        <a name="filepickertop"></a>
+        <div class="row-fluid"  id="fileArea">
+           
+        </div>
+    </div>
+</div>

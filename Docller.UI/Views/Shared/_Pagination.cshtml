@@ -1,0 +1,50 @@
+﻿@using System.Globalization
+@using Docller.Common
+@model Docller.Core.Models.IPageable
+<div class="pagination">
+    <ul>
+        @{ string action = ViewContext.RouteData.GetRequiredString("action"); }
+        @{ RouteValueDictionary routeValueDictionary = ViewContext.GetCombinedRouteValues(); }
+        @if (this.Model.HasPreviousPage)
+        {
+            <li>
+                @Html.ActionLink("Prev", @action, routeValueDictionary.AddAdditionalRouteValues(new {PageNumber = this.Model.GetPreviousPage()}))
+            </li>
+        }
+        else
+        {
+            <li class="disabled"><a href="javascript:void()">Prev</a></li>
+        }
+                                     
+         
+        @for (int i = 1; i <= this.Model.TotalPages; i++)
+        {
+            if (!this.Model.IsActivePage(i))
+            {
+                <li>
+                    @Html.ActionLink(i.ToString(CultureInfo.InvariantCulture), @action, routeValueDictionary.AddAdditionalRouteValues(new {PageNumber = i}))
+                </li>
+            }
+            else
+            {
+                <li class="disabled"><a href="javascript:void()">@i</a></li>
+
+            }
+
+        }
+         
+         
+        @if (this.Model.HasNextPage)
+        {
+            <li>
+                @Html.ActionLink("Next", action, routeValueDictionary.AddAdditionalRouteValues(new {PageNumber = this.Model.GetNextPage()}))
+            </li>
+        }
+        else
+        {
+            <li class="disabled"><a href="javascript:void()">Next</a></li>
+        }
+
+                                  
+    </ul>
+</div>

@@ -1,0 +1,128 @@
+﻿@using Docller.Core.Models
+@using Docller.Models
+@model Docller.Core.Models.TransmittalEmailView
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Docller E-mail</title>
+    </head>
+    <body style="margin: 0;font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 14px;line-height: 20px;color: #333;background-color: #fff">
+        <table border="0" style="border:#b3b3b3 solid 1px; width: 80%; margin: auto; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="padding-left: 5px; padding-top: 10px; padding-bottom: 5px; min-height: 40px; background-color: #1b1b1b;backborder1-bottom: 1px solid #1b1b1b; border-color: #252525; -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075); -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.075)">
+                    <span style="display: block; font-size: 20px; font-weight: 200; color: #999999; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);">
+                        Docller
+                    </span>
+                
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="width:100%; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif" border="0">
+                        <tr>
+                            <td>
+                                Hello
+                            </td>
+                        </tr>                    
+                        <tr>
+                            <td style ="padding-top: 10px;">
+                                @this.Model.Transmittal.CreatedBy.DisplayName has issued documents with following details: 
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td style="padding: 9px; min-height: 20px; margin-bottom: 20px; background-color: #f5f5f5; border: 1px solid #e3e3e3; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05)">
+                                <strong>Organization:</strong> @this.Model.Transmittal.CustomerName
+                                <br />
+                                <strong>Project:</strong> @this.Model.Transmittal.ProjectName
+                                <br />
+                                <strong>Status:</strong> @this.Model.Transmittal.TransmittalStatus.StatusText
+                                <br/>
+                                <strong>Message:</strong><br />
+                                @this.Model.Transmittal.Message
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 10px; padding-bottom: 10px;">
+                                <strong>Recipients:</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 9px; min-height: 20px; margin-bottom: 20px; background-color: #f5f5f5; border: 1px solid #e3e3e3; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05)">
+            
+                                @{
+                                    var recipients = this.Model.Transmittal.Distribution.Where(x => !x.IsCced);
+                                    foreach (TransmittalUser transmittalUser in recipients)
+                                    {
+                                        <li>@transmittalUser.DisplayName (@transmittalUser.Company.CompanyName)</li>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                        @{
+                            var cced = this.Model.Transmittal.Distribution.Where(x => x.IsCced).ToList();
+                            if (cced.Any())
+                            {
+                                <tr>
+                                    <td style="padding-top: 10px; padding-bottom: 10px;">
+                                        <strong>Cced:</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 9px; min-height: 20px; margin-bottom: 20px; background-color: #f5f5f5; border: 1px solid #e3e3e3; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05)">
+                                        <ul>
+                         
+                                            @foreach (TransmittalUser transmittalUser in cced)
+                                            {
+                                                <li>@transmittalUser.DisplayName (@transmittalUser.Company.CompanyName)</li>
+                                            }
+                                        </ul>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        <tr>
+                            <td style="padding:10px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">
+                                <div style="width:100%; text-align: center; margin-top: 20px;">
+                                    @{
+                                        string downloadUrl = string.Format("{0}/Download/DownloadTransmittal/{1}?transmittalId={2}", this.Model.RootUrl, this.Model.Transmittal.ProjectId, this.Model.Transmittal.TransmittalId);
+
+                                        <!--[if mso]>
+                                            <v:roundrect xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:v="urn:schemas-microsoft-com:vml" style="width: 175px; height: 25px; v-text-anchor: middle;" href="@downloadUrl" fillcolor="rgb(0, 109, 204)" strokecolor="rgb(0, 109, 204)" strokeweight="0.2pt" arcsize="0.1" o:borderbottomcolor="#e3e3e3"><v:fill type="solid" color="rgb(0, 109, 204)"></v:fill><w:anchorlock></w:anchorlock><center style="background-color: rgb(9, 109, 205); color: rgb(255, 255, 255); display: block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; text-align: center; text-decoration: underline;">Dowload Issued Files</center></v:roundrect>
+                                            <div style="width: 0px; height: 0px; overflow: hidden; display: none; visibility: hidden; mso-hide: all;">
+
+                                        <![endif]-->
+
+                                        <a href="@downloadUrl" style="text-decoration: none; padding: 4px 12px; display: inline-block; margin-bottom: 0; font-size: 14px; line-height: 20px; color: #fff; text-align: center; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); vertical-align: middle; cursor: pointer; background-color: #006dcc; border: 1px solid #ccc; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); border-bottom-color: #b3b3b3; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05)">
+                                            Download Issued files
+                                        </a>
+                                        <!--[if mso]></div><![endif]-->
+                                    }
+                                </div>  
+                            </td>
+                        </tr>
+                    </table>
+
+
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:10px;"></td>
+            </tr>
+            <tr>
+                <td style="border-top: #b3b3b3 solid 1px; background-color: #f5f5f5; padding: 5px;font-size: 10px;">
+                    <p>&copy; @DateTime.Now.Year - Docller</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

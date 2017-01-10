@@ -1,0 +1,42 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    
+    @Scripts.Render(ScriptBundles.JQueryBundle)
+    @Styles.Render(StyleBundles.ThemesBundle)
+    @Styles.Render(StyleBundles.BootstrapBundle)
+    @Styles.Render(StyleBundles.SiteBundle)
+        <meta name="viewport" content="width=device-width">
+</head>
+<body>
+    <header>
+        <div class="dc-altHeaderBar">
+            @RenderSection("alternateHeader", false)
+        </div>    
+    </header>
+    <div class="container-fluid dc-main-content">
+        @RenderBody()     
+    </div>
+    <footer>
+            <hr />
+        <div class="content-wrapper dc-footer">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - Docller</p>
+            </div>
+            <div class="float-right">
+                <ul id="social">
+                    <li><a href="http://facebook.com" class="facebook">Facebook</a></li>
+                    <li><a href="http://twitter.com" class="twitter">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        @Scripts.Render(ScriptBundles.BootStrapBundle)
+        </footer>
+</body>
+</html>

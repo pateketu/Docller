@@ -1,0 +1,16 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+@Scripts.Render(ScriptBundles.ValidationBundle)
+@Scripts.Render(ScriptBundles.KnockoutBundle)
+@Scripts.Render(ScriptBundles.FileRegisterBundle)
+
+
+@Styles.Render(StyleBundles.DynaTreeBundle)
+@Styles.Render(StyleBundles.PluUploadBundle)
+@Styles.Render(StyleBundles.FileRegisterBundle)
+@Styles.Render(StyleBundles.FileRegisterResponsiveBundle)
+<script type="text/javascript">
+        docller.projectId = @ViewContext.GetCurrentProjectId();
+        docller.folderId = @ViewContext.GetCurrentFolderId();
+</script>

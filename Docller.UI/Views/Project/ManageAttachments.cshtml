@@ -1,0 +1,84 @@
+﻿@using Docller.Common
+@using Docller.Common
+@using Docller.Core.Models
+@model string
+<div id="attachmentContainer">
+    <table class="table table-bordered fileAttachmentsTable" data-bind="visible: fileName">
+            <thead>
+                <tr>
+                    <th class="width5"></th>
+                    <th>Attachment</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <img class="filetype-icon-large" data-bind="attr: { src: icon, title: fileName}" />
+                    </td>
+                    <td>
+                        <span data-bind="text: fileName"></span>
+                        <div><small>by</small> <small data-bind="text: createdBy"></small> / <small data-bind="text: formattedCreatedDate"></small></div>
+
+                    </td>
+                    <td>
+                        <div class="align-center">
+                            <button class="btn btn-small deleteAttachment" data-bind="attr: {'data-fileId': fileId, 'data-revisionNumber': revisionNumber}"><i class="icon-remove"></i> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+    <div class="alert alert-info" data-bind="visible: !fileName()">File does not have any Attachments </div>    
+    <div class="clearfix" data-bind="visible: !fileName()"></div>
+    @*
+    For now not supporting upload of attachment individualy
+    <h4 data-bind="visible: !fileName()">Upload attachment</h4>
+    <h4 data-bind="visible: fileName">Upload new revision</h4>
+    <hr/>
+    <div id="attachmentUpload" data-bind="visible: !fileName()">
+        <div id="attachmentFileList"></div>
+        <div class="pull-right">
+            <button class="btn btn-small" id="btnSelectAttachment"><i class="icon-file"></i> Select File</button> 
+            <button class="btn btn-small disabled" id="btnUploadAttachment" data-bind="attr: { 'data-fileId': fileId }"><i class="icon-upload"></i> Upload</button> 
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    *@
+    <h4 data-bind="visible: versions() != null && versions().length > 0">Attachment Versions</h4>
+    <hr data-bind="visible: versions() != null && versions().length > 0"/>
+
+    <table class="table table-bordered fileAttachmentsTable" data-bind="visible: versions() != null && versions().length > 0">
+        <thead>
+            <tr>
+                <th class="width5"></th>
+                <th>Attachment</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: versions">
+                <tr>
+                    <td>
+                        <img class="filetype-icon-large" data-bind="attr: { src: icon, title: fileName }" />
+                    </td>
+                    <td>
+                        <span data-bind="text: fileName"></span>
+                        @*<span data-bind="text: docller.fileRegister.utils.formatAttachmentVersion($index() + 1)" class="badge badge-version badge-Inverse" data-toggle="tooltip">V</span>*@
+                        <div><small>by</small> <small data-bind="text: createdBy"></small> / <small data-bind="text: formattedCreatedDate"></small></div>
+
+                    </td>
+                    <td>
+                        <div class="align-center">
+                            <button class="btn btn-small deleteAttachmentVersion" data-bind="attr: { 'data-fileId': fileId, 'data-revisionNumber': revisionNumber }"><i class="icon-remove"></i> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    var attachment = new docller.fileAttachments();
+    attachment.bindModel(@Html.Raw(this.Model));
+</script>

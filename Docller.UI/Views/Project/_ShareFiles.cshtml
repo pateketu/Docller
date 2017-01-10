@@ -1,0 +1,49 @@
+﻿@using Docller.Common
+@using (Ajax.BeginForm("ShareFiles",
+    new
+    {
+        ProjectId = ViewContext.GetCurrentProjectId(),
+        FolderId = ViewContext.GetCurrentFolderId()
+    },
+    new AjaxOptions()
+    {
+        OnBegin = "window.$shareFilesAction.onStart",
+        OnSuccess = "window.$shareFilesAction.onComplete",
+        OnFailure = "window.$shareFilesAction.onError",
+        HttpMethod = "POST"
+    },
+    new {id = "shareFilesForms"}))
+{
+
+
+    <div id="shareFilesContainer">
+        <div class="alert alert-info">
+            Use this option to send files to any email address, user will not be required to login into Docller to download files, files shared will be available to download for 21 days.
+        </div>
+        <div class="alert alert-danger">
+            @Html.ActionLink("Creation of Transmittal ", "CreateTransmital", routeValues: new {projectId = @ViewContext.GetCurrentProjectId(), folderId = @ViewContext.GetCurrentFolderId()}) is recommended to issue documents & generate issue sheets.
+        </div>
+        <input type="hidden" id="fileIds" name="fileIds" />
+        <div>
+            <div class="controls-row">
+                <label>Emails</label>
+                <textarea  class="span5" rows="5" id="emails" name="emails" placeholder="One email per line" data-val-required="Please provide emails" data-val="true"></textarea> 
+                <div class="clearfix"></div>
+                <span class="field-validation-valid label label-important dc-whitecolor" data-valmsg-replace="false" data-valmsg-for="emails" id="emailsReqMsg">Please provide emails.</span>
+                                
+            </div>
+            <div class="controls-row">
+                <label>Message </label>
+                <textarea rows="7" id="emailmessage" name="emailmessage" class="span5"></textarea>
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+        <div id="shareFilesErrors"></div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="btnShareFiles">Share...</button>
+        </div>
+    </div>
+    
+}
+ 

@@ -1,0 +1,31 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title</title>
+        @Scripts.Render(ScriptBundles.JQueryBundle)
+        @Scripts.Render(ScriptBundles.DocllerCommonBundle)
+
+        @Styles.Render(StyleBundles.ThemesBundle)
+        @Styles.Render(StyleBundles.BootstrapBundle)
+        @RenderSection("AdditionalHeader", false)
+        @Styles.Render(StyleBundles.SiteBundle)
+        <meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        @if (Request.IsAuthenticated)
+        {
+            <div class="container-fluid main-container" >
+                @RenderBody()     
+            </div>
+            
+            @Scripts.Render(ScriptBundles.BootStrapBundle)
+
+            @RenderSection("AdditionalFooter", false)
+        }
+    </body>
+</html>

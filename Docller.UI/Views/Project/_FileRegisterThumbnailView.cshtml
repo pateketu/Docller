@@ -1,0 +1,61 @@
+﻿@using Docller.Common
+@using Docller.Core.Common
+@using Docller.Models
+@using Docller.Core.Models
+@using File = Docller.Core.Models.File
+@using SortDirection = Docller.Core.Models.SortDirection
+@model Docller.Models.FileRegisterViewModel
+@foreach (File file in Model.Files)
+{
+    <div  class="span2 thPreview preview" data-fileId="@file.FileId" data-internalName="@file.FileInternalName" data-previewTimestamp="@file.PreviewsTimeStamp">
+        <div>
+            <div class="span1 pull-left thPreviewAction hidden-tablet hidden-phone">
+                <input type="checkbox"  name="@file.FileId"  Id="@file.FileId" data-fileId="@file.FileId" data-internalName="@file.FileInternalName" class="chkFile" />
+            </div>
+            <div class="dropdown span1 pull-right thPreviewAction hidden-tablet hidden-phone">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" title="More options">
+                    <img src="/Images/action_arrow.png" />
+                </a>
+                <ul class="dropdown-menu">
+                            <li><a href="#" class="fileDownload" data-fileId="@file.FileId"><i class="icon-download-alt"></i>Download</a></li>
+                            @{ bool hasReadWriteAccess = false;}
+                            @if (DocllerContext.Current.Security.HasReadWriteAccess)
+                            {
+                                hasReadWriteAccess = true;
+                                <li><a href="#" class="uploadVersion" data-fileId="@file.FileId" id="@string.Format("uploadVersion_{0}", file.FileId)"><i class="icon-upload"></i>Upload new revision</a></li>
+                                <li><a href="#" class="fileDelete" data-fileId="@file.FileId"><i class="icon-remove"></i>Delete</a></li>
+                            }
+                            <li><a data-target="#historyModal" data-toggle="modal" href="/Project/FileHistory/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/?fileId=@file.FileId"><i class="icon-list-alt"></i>History</a></li>
+                            
+                            
+                            @if (hasReadWriteAccess)
+                            {
+                                <li class="divider"></li>
+                                <li><a data-target="#attachmentModal" data-toggle="modal" href="/Project/ManageAttachments/@ViewContext.GetCurrentProjectId()/@ViewContext.GetCurrentFolderId()/?fileId=@file.FileId">Manage CAD attachment</a></li>
+                            }
+                </ul>
+            </div>
+        </div>
+        <div class="thPreviewImage">
+            <img src="@string.Format("/Project/FilePreview/{0}/?fileId={1}&previewType=SThumb&ptag={2}&internalName={3}",ViewContext.GetCurrentProjectId(),file.FileId,file.PreviewsTimeStamp,file.FileInternalName)" />
+        </div>
+        <div class="clearfix"></div>
+        <div class="padded">
+             @if (file.PreviewsTimeStamp > 0)
+             {
+                 <a class="thViewFileName" title="@file.FileName" href="#"  data-content="<strong>Title:</strong> @file.Title<br/><strong>Rev:</strong> @file.Revision<br/><strong>Status:</strong> @file.Status" data-html="true" data-fileId="@file.FileId" data-internalName="@file.FileInternalName"
+                    data-previewTimestamp="@file.PreviewsTimeStamp" data-toggle="zoomablepreview" data-forcezoomable='true'>
+                     @Html.Raw(file.FileName.Length > 10 ? string.Format("{0}...{1}", file.FileName.Substring(0, 10), file.FileExtension) : file.FileName)
+                 </a>
+             }
+             else
+             {
+                 <a class="thViewFileName" data-toggle="directdownload" title="@file.FileName" href="#"  data-content="<strong>Title:</strong> @file.Title<br/><strong>Rev:</strong> @file.Revision<br/><strong>Status:</strong> @file.Status" data-html="true" data-fileId="@file.FileId" >
+                     @Html.Raw(file.FileName.Length > 10 ? string.Format("{0}...{1}", file.FileName.Substring(0, 10), file.FileExtension) : file.FileName)
+                 </a>
+             }
+            <div>@Html.VersionBadge(file) @Html.AttachmentIcon(file) </div>
+                <div><small>by @file.CreatedBy.DisplayName / @file.CreatedDate.ToShortDateString().Replace("/", ".")</small></div>
+        </div>
+    </div>
+}

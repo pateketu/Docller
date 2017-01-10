@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Docller.Cloud" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
+  <Role name="Docller.UI">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=docller7;AccountKey=Z5mXq668RlY06d+3bD9NQ+L0xVA8GTCUTD1eU3FCa66PyfclomImtr2OKIa88Bbl1L6BfbvCDqGZFJKkUWf1Ow==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="pateketu" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEB62mMRK28GWS14mqy3fwHEwDQYJKoZIhvcNAQEBBQAEggEAf/lVPJd/djjzYXwxjaix/4IrvC9pNCSW7HTzvwSq62jUlUYtHt/Es1skAGeJ07uLWuBNFCD8EI7FyjQX5I1OKeErv5z2dY2Jg7WO2yqa+BnDzsa2QXwPYQDsZvWTz0H0ojOrP6j3Xvy9yesYJc2SY8K59NyaAhmRHH9OMftU7Qgy0wsAxnUSoeCc6RlRQJxSJ1/+zZEInthEBlDDNvaJ0pm1nlx5DP45g7HSxvnaVpfUBcXHFh6mdFl1qkoy900qEmP56MmTH58788P6U7Da1vdtknoAHI6dYuTtS1NWd2usTdCzd/NGZFDX+goEAt6uLNd7ch360kBNiAjN1w7prDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECH5Pqe7oijaJgBD7JRwH80C4UHioc3zjRszf" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2014-09-20T23:59:59.0000000+01:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+      <Setting name="FederatioName" value="Customer_Federation" />
+      <Setting name="DistributionName" value="cid" />
+      <Setting name="FederationEnabled" value="true" />
+      <Setting name="NoReplyEmailSettingress" value="no-reply@Docller.com" />
+      <Setting name="DefaultFolders" value="Architect,Structural,MEP,Interior Designer,Landscape,Environmental,Quantity Surveyor,CDM-Coordinator,Project Manager,Main Contractor,Sub-Contractor - Submittal" />
+      <Setting name="DefaultStatus" value="For Amendment,For Approval,For Comment,For Construction,For Coordination,For Design,For Information,For Review" />
+      <Setting name="AzureFolderPathSeperator" value="/" />
+      <Setting name="AzureBlobStorage" value="true" />
+      <Setting name="UseHttpCache" value="true" />
+      <Setting name="LocalStoragePath" value="c:\temp" />
+      <Setting name="SupportedCADFileTypes" value=".dwg" />
+      <Setting name="DomainFormat" value="http://{0}.Docller.com" />
+      <Setting name="AzureStorageConnectionString" value="DefaultEndpointsProtocol=https;AccountName=docller;AccountKey=2uGYKCHk4y2NDz1cm01tWofNPx507dqydCwPv8Uw2W0kKnY1SKkQSpFVAzX0cThGK9kDqRTrLZTHUKvR0ENt9w==" />
+      <Setting name="DocllerDbConnection" value="Server=tcp:lvuroe746t.database.windows.net,1433;Database=Docller;User ID=Docller_User@lvuroe746t;Password=Str0ngpa55w0rd;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="0F378E9D719BC3C56833FAB199E59DD9EC430BED" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

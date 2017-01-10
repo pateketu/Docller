@@ -1,0 +1,95 @@
+﻿@using System.Web.Optimization
+@using Docller
+@using Docller.Common
+@using Docller.Models
+@using Docller.Core.Models
+@using File = Docller.Core.Models.File
+@using SortDirection = Docller.Core.Models.SortDirection
+@model Docller.Models.FileRegisterViewModel
+
+ @if (this.Model.FolderCrumbs.Count > 0)
+ {
+     <div class="span9">
+         <div class="foldercrumb">
+             <div class="clearfix fileListHeader">
+                 <div class="pull-left folderTab">
+                     <i class="icon-folder-open"></i> @this.Model.FolderCrumbs.First().FolderName
+                 </div>
+                 <div class="nav pull-right">
+                     <a href="#"><i class="icon-th"></i></a>
+                     <div class="dropdown">
+                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                             Sort
+                             <b class="caret"></b>
+                         </a>
+                         <ul class="dropdown-menu">
+                             @{ RouteValueDictionary routeValueDictionary = ViewContext.GetCombinedRouteValues(); }
+                             @{ string action = ViewContext.RouteData.GetRequiredString("action"); }
+                             <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.Date, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.Date ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i> Date</a></li>
+                             <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.FileName, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.FileName ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i> Document #</a></li>
+                             <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.Title, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.Title ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i> Title</a></li>
+                             <li><a href="@Url.Action(action, routeValueDictionary.AddAdditionalRouteValues(new {sortBy = FileSortBy.Status, sortDirection = Model.Files.Direction == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending}))"><i @(this.Model.Files.SortBy == FileSortBy.Status ? (this.Model.Files.Direction == SortDirection.Descending ? "class=sort-desc-icon" : "class=sort-asc-icon") : string.Empty)></i>Status</a></li> 
+                         </ul>                          
+                     </div>
+                 </div>
+             </div>
+                            
+                         
+         </div>          
+         @if (this.Model.Files.Count > 0)
+         {
+             <table class="table table-hover table-minwidth" id="filesTable">
+                 <thead>
+                     <tr>
+                         <th class="1width1"><input type="checkbox" name="chkAllFiles"  Id="chkAllFiles"/></th>
+                         <th class="1width5"></th>
+                         <th class="1width35">Document #</th>
+                         <th class="1width29">Document Title</th>
+                         <th class="1width5">Revision</th>
+                         <th class="1width15">Status</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     @foreach (File file in Model.Files)
+                     {
+                         <tr>
+                             <td>
+                                 <input type="checkbox" name="@file.FileId"  Id="@file.FileId" 
+                                        data-fileId="@file.FileId" 
+                                        data-filename="@file.FileName" 
+                                        data-filetitle="@file.Title" 
+                                        data-filerev="@file.Revision" />
+                             </td>
+                             <td>
+                                 @Html.FileTypeIcon(file)
+                             </td>
+                                       
+                             <td>
+                                 <div>@file.FileName @Html.VersionBadge(file) @Html.AttachmentIcon(file) </div>
+                                 <div><small>by @file.CreatedBy.DisplayName / @file.CreatedDate.ToShortDateString().Replace("/", ".")</small></div>
+                                            
+                             </td>
+                             <td>@file.Title</td>
+                             <td>@file.Revision</td>
+                             <td>@file.Status</td>
+                         </tr>
+                     }
+
+                 </tbody>
+             </table>
+
+             if (this.Model.Files.HasPages)
+             {
+                 <div class="align-center">
+                     @Html.Partial("_Pagination", this.Model.Files)
+                 </div>
+             }
+         }
+         else
+         {
+             <div class="alert alert-info">
+                 Folder contains no Files.
+             </div>
+         }
+     </div>
+ }

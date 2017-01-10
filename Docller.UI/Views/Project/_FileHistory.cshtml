@@ -1,0 +1,103 @@
+﻿@using Docller.Common
+@using Docller.Core.Models
+@model FileHistory
+
+
+<div class="row">
+    <div class="span4">@Html.FileTypeIcon(this.Model.File) <strong>@this.Model.File.FileName</strong></div>
+</div>
+<hr/>
+
+@if (this.Model.Transmittals != null && this.Model.Transmittals.Any())
+{
+    <div><strong>Current Revision Transmittal\s</strong></div>
+    <table class="table table-bordered">
+        
+        <thead>
+            <tr>
+                <th class="width15">#</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Transmittal t in this.Model.Transmittals)
+            {
+                <tr>
+                    <td>
+                        @t.TransmittalNumber
+                    </td>
+                    <td>
+                        <div>@t.Subject</div>
+                        <div><small>by @t.CreatedBy.DisplayName / @t.CreatedDate.ToShortDateString().Replace("/", ".")</small></div>
+                    </td>
+                    <td>@t.TransmittalStatus.StatusText</td>
+                    <td>@Html.ActionLink("Issue sheet", "IssueSheet", new {transmittalId=t.TransmittalId})</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+   
+}
+else
+{
+    
+    <div class="alert alert-info">Current Revision not Issued</div>    
+    <div class="clearfix"></div>
+}
+@if (this.Model.File.Versions != null && this.Model.File.Versions.Any())
+{
+    <div><strong>Versions</strong></div>
+    <table class="table table-bordered">
+        
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Title</th>
+                <th>Revision</th>
+                <th>Status</th>
+                <th>Issue Sheet?</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (FileVersion f in this.Model.File.Versions)
+            {
+                <tr id="@string.Format("fileRev{0}",f.RevisionNumber)">
+                    <td>
+                        <div>@f.FileName @Html.AttachmentIcon(f)</div>
+                        <div><small>by @f.CreatedBy.DisplayName / @f.CreatedDate.ToShortDateString().Replace("/", ".")</small></div>
+                    </td>
+                    <td>
+                        @f.Title
+                    </td>
+                    <td>
+                        @f.Revision
+                    </td>
+                    <td>@f.Status</td>
+                    <td>
+                        <div class="align-center">
+                            @if (f.TransmittalId > 0)
+                            {
+                                @Html.ActionLink("Issue sheet", "IssueSheet", new {transmittalId = f.TransmittalId, revisionNumber = f.RevisionNumber})
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">Not Issued</div>
+                            }
+                        </div>
+                    </td>
+                    <td class="width20">
+                        <div class="align-center">
+                            <button class="btn btn-small downloadVersion" data-fileId="@Model.File.FileId" data-revisionNumber="@f.RevisionNumber"><i class="icon-download-alt"></i> Download</button> 
+                            <button class="btn btn-small deleteVersion"  data-fileId="@Model.File.FileId" data-revisionNumber="@f.RevisionNumber"><i class="icon-remove"></i> Delete</button>
+ 
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

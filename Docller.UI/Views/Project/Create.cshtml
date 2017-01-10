@@ -1,0 +1,25 @@
+﻿@using System.Web.Optimization
+@using Docller
+@model Docller.Core.Models.Project
+
+@{
+    ViewBag.Title = "New Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Project</h2>
+@Scripts.Render(ScriptBundles.ValidationBundle)
+
+@Html.ValidationSummary(true, "Project creation was unsuccessful.")
+
+@using (Html.BeginForm((string)ViewBag.FormAction, "Project")) {
+    
+        <div class="controls-row">
+               @Html.LabelFor(m => m.ProjectName,"Project Name")
+               @Html.TextBoxFor(m => m.ProjectName)
+               @Html.ValidationMessageFor(m => m.ProjectName, "Project Name is Required")
+        </div>                
+    <div class="controls-row">
+        <input type="submit" class="btn btn-primary" value="Create" title="Create" />
+    </div>
+}

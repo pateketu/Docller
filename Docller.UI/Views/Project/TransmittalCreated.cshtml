@@ -1,0 +1,30 @@
+﻿@using Docller.Core.Models
+@model Transmittal
+
+@{
+    ViewBag.Title = "Transmittal Created";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="container-noSplitter" class="filecontainer">
+    <div class="right">
+        <h2><small>Your transmittal has been sent to:</small></h2>
+        @foreach (TransmittalUser transmittalUser in Model.Distribution.Where(x => !x.IsCced))
+        {
+            <div>@transmittalUser.DisplayName (@transmittalUser.Company.CompanyName) </div>
+        }
+        
+        <h2><small>Cced:</small></h2>
+         @foreach (TransmittalUser transmittalUser in Model.Distribution.Where(x => x.IsCced))
+        {
+            <div>@transmittalUser.DisplayName (@transmittalUser.Company.CompanyName) </div>
+        }
+        
+        <div>
+            <img src="/Images/filetype-icons/16X16/pdf.png"/>  <a href="/Project/IssueSheet/?transmittalId=@Model.TransmittalId">
+               Download Issue Sheet
+            </a>
+        </div>
+
+    </div>
+</div>
